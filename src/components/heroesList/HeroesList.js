@@ -1,7 +1,8 @@
 import { useHttp } from "../../hooks/http.hook";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { createSelector } from "reselect";
 import "./heroesList.scss";
 
 import {
@@ -13,9 +14,18 @@ import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
 
 const HeroesList = () => {
-  const { heroes, heroesLoadingStatus, currentFilter } = useSelector(
-    (state) => state
+  const filteredHeroesSelector = createSelector(
+    (state) => state.heroes.heroes,
+    (state) => state.filters.currentFilter,
+    (heroes, currentFilter) => {
+      if (currentFilter === "all") {
+        return heroes;
+      }
+      return heroes.filter((item) => item.element === currentFilter);
+    }
   );
+  const filteredHeroes = useSelector(filteredHeroesSelector);
+  const { heroesLoadingStatus } = useSelector((state) => state);
   const dispatch = useDispatch();
   const { request } = useHttp();
 
@@ -27,13 +37,6 @@ const HeroesList = () => {
 
     // eslint-disable-next-line
   }, []);
-
-  const filteredHeroes = useMemo(() => {
-    if (currentFilter === "all") {
-      return heroes;
-    }
-    return heroes.filter((item) => item.element === currentFilter);
-  }, [heroes, currentFilter]);
 
   if (heroesLoadingStatus === "loading") {
     return <Spinner />;

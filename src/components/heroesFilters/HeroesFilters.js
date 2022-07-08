@@ -5,7 +5,7 @@ import { useHttp } from "../../hooks/http.hook";
 import { setFilters, setCurrentFilter } from "../../actions";
 
 const HeroesFilters = () => {
-  const filters = useSelector((state) => state.filters);
+  const filters = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
   const { request } = useHttp();
   const [activeFilter, setActiveFilter] = useState("all");

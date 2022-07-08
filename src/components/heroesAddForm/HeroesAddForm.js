@@ -5,7 +5,7 @@ import { useHttp } from "../../hooks/http.hook";
 import { addHero } from "../../actions";
 
 const HeroesAddForm = () => {
-  const filters = useSelector((state) => state.filters);
+  const filters = useSelector((state) => state.filters.filters);
   const dispatch = useDispatch();
   const { request } = useHttp();
   const [name, setName] = useState("");
