@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
-import { addHero } from "../../actions";
+import { addHero } from "../heroesList/heroesSlice";
 
 const HeroesAddForm = () => {
   const filters = useSelector((state) => state.filters.filters);

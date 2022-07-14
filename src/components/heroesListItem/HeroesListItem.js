@@ -1,57 +1,68 @@
+import { useDispatch } from "react-redux";
+import { useCallback } from "react";
+import { deleteHero } from "../heroesList/heroesSlice";
+import { useHttp } from "../../hooks/http.hook";
 
-import { useDispatch } from 'react-redux';
-import { useCallback } from 'react';
-import {deleteHero} from '../../actions'
-import {useHttp} from '../../hooks/http.hook';
+const HeroesListItem = ({ name, description, element, id }) => {
+  const { request } = useHttp();
+  const dispatch = useDispatch();
 
-const HeroesListItem = ({name, description, element, id}) => {
-    const {request} = useHttp();
-    const dispatch = useDispatch();
-
-    const handleDeleteButtonClick = useCallback((id) => {
-        request(`http://localhost:3001/heroes/${id}`, 'DELETE').then(() => {
-            dispatch(deleteHero(id))
-        }).catch((error) => {
-            console.error(error)
+  const handleDeleteButtonClick = useCallback(
+    (id) => {
+      request(`http://localhost:3001/heroes/${id}`, "DELETE")
+        .then(() => {
+          dispatch(deleteHero(id));
         })
-    }, [dispatch, request])
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    [dispatch, request]
+  );
 
-    let elementClassName;
+  let elementClassName;
 
-    switch (element) {
-        case 'fire':
-            elementClassName = 'bg-danger bg-gradient';
-            break;
-        case 'water':
-            elementClassName = 'bg-primary bg-gradient';
-            break;
-        case 'wind':
-            elementClassName = 'bg-success bg-gradient';
-            break;
-        case 'earth':
-            elementClassName = 'bg-secondary bg-gradient';
-            break;
-        default:
-            elementClassName = 'bg-warning bg-gradient';
-    }
+  switch (element) {
+    case "fire":
+      elementClassName = "bg-danger bg-gradient";
+      break;
+    case "water":
+      elementClassName = "bg-primary bg-gradient";
+      break;
+    case "wind":
+      elementClassName = "bg-success bg-gradient";
+      break;
+    case "earth":
+      elementClassName = "bg-secondary bg-gradient";
+      break;
+    default:
+      elementClassName = "bg-warning bg-gradient";
+  }
 
-    return (
-        <li 
-            className={`card flex-row mb-4 shadow-lg text-white ${elementClassName}`}>
-            <img src="http://www.stpaulsteinbach.org/wp-content/uploads/2014/09/unknown-hero.jpg" 
-                 className="img-fluid w-25 d-inline" 
-                 alt="unknown hero" 
-                 style={{'objectFit': 'cover'}}/>
-            <div className="card-body">
-                
-                <h3 className="card-title">{name}</h3>
-                <p className="card-text">{description}</p>
-            </div>
-            <span className="position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-light">
-                <button type="button" className="btn-close btn-close" aria-label="Close" onClick={() => handleDeleteButtonClick(id)}></button>
-            </span>
-        </li>
-    )
-}
+  return (
+    <li
+      className={`card flex-row mb-4 shadow-lg text-white ${elementClassName}`}
+    >
+      <img
+        src='http://www.stpaulsteinbach.org/wp-content/uploads/2014/09/unknown-hero.jpg'
+        className='img-fluid w-25 d-inline'
+        alt='unknown hero'
+        style={{ objectFit: "cover" }}
+      />
+      <div className='card-body'>
+        <h3 className='card-title'>{name}</h3>
+        <p className='card-text'>{description}</p>
+      </div>
+      <span className='position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-light'>
+        <button
+          type='button'
+          className='btn-close btn-close'
+          aria-label='Close'
+          onClick={() => handleDeleteButtonClick(id)}
+        ></button>
+      </span>
+    </li>
+  );
+};
 
 export default HeroesListItem;
